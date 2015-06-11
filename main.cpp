@@ -4,8 +4,7 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <string>
-
-
+#include "init.h"
 
 int main(int argc, char* args[])
 {
