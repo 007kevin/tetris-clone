@@ -4,7 +4,7 @@
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_HEIGHT = 580;
 
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
@@ -68,6 +68,6 @@ void close()
   gWindow = NULL;
   
 
-  //Quit SDl subsystems
+  //Quit SDL subsystems
   SDL_Quit();
 }

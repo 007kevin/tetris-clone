@@ -6,7 +6,7 @@
 
 //Grid dimensions
 #define NROW 22
-#define NCOL 22
+#define NCOL 10
 
 //Cells for tetris grid
 class Cell{
@@ -14,12 +14,27 @@ class Cell{
     Cell();
     Cell(int, int);
     ~Cell();
+
+    //Initialize cell position
     void init(int, int);
+
+    //Free cell memory
     void free();
-    SDL_Rect getRect();
+
+    //Render cell
+    void render();
+
+    //Make cell visible
+    void on();
+
+    //Make cell invisible
+    void off();
 
   private:
+    //Cell dimensions
     SDL_Rect rect;
+    //Cell colors
+    Uint8 r, g, b, a;
 };
 
 //Grid for tetris
@@ -36,9 +51,6 @@ class Grid{
     
     //Render grid
     void render();
-
-    //get nth row of cell grid
-    SDL_Rect* getRow(int);
 
     //Deallocates texture
     void free();

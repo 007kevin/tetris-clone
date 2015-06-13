@@ -22,7 +22,7 @@ int main(int argc, char* args[])
     //Event handler
     SDL_Event e;
 
-    //Grid object
+    //Grid
     Grid tetris;
 
     //While application is running
@@ -37,14 +37,10 @@ int main(int argc, char* args[])
           quit = true;
         }
       }
-      SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0xFF);
-      SDL_RenderClear(gRenderer);
 
-      SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-      tetris.render(); 
-      SDL_RenderPresent(gRenderer);
+      tetris.render();
+
     }
-
 
   }
 
