@@ -95,9 +95,6 @@ void Grid::render(){
   SDL_SetRenderDrawColor(gRenderer, dRED, dGREEN, dBLUE, dALPHA);
   SDL_RenderClear(gRenderer);
  
-  //Testing functionality of turning on cell 
-  cells[4][4].on();
-
   //Render NROW x NCOL cells table
   for (int i = 0; i < NROW; ++i){
     for (int j = 0; j < NCOL; ++j){
