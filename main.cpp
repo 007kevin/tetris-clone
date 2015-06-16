@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string>
 #include "init.h"
+#include "grid.h"
 
 int main(int argc, char* args[])
 {
@@ -21,6 +22,9 @@ int main(int argc, char* args[])
     //Event handler
     SDL_Event e;
 
+    //Grid
+    Grid tetris;
+
     //While application is running
     while(!quit)
     {
@@ -33,12 +37,10 @@ int main(int argc, char* args[])
           quit = true;
         }
       }
-      SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-      SDL_RenderClear(gRenderer);
-      
-      SDL_RenderPresent(gRenderer);
-    }
 
+      tetris.render();
+
+    }
 
   }
 

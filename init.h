@@ -4,6 +4,11 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
+#define dRED 0
+#define dGREEN 0
+#define dBLUE 0
+#define dALPHA 0xFF
+
 //Screen dimension constants
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;

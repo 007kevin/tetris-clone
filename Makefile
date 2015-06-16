@@ -1,8 +1,8 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = main.cpp init.cpp
+OBJS = main.cpp init.cpp grid.cpp
 
 #CC specifies which compiler we're using
-CC = g++
+CC = g++ -std=c++11
 
 #COMPILER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -lSDL2 -lSDL2_image
