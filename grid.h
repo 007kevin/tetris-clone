@@ -8,7 +8,17 @@
 #define NROW 22
 #define NCOL 10
 
-//Cells for tetris grid
+/*********************************
+ * Struct for defining tetris pieces
+ * ******************************/
+struct Tetris_piece {
+  //Coordinates for the tetris piece
+  
+};
+
+/*********************************
+ * Cells for tetris grid
+ * ******************************/
 class Cell{
   public:
     Cell();
@@ -37,7 +47,9 @@ class Cell{
     Uint8 r, g, b, a;
 };
 
-//Grid for tetris
+/*********************************
+ * Grid for tetris
+ * ******************************/
 class Grid{
   public:
     //Initialize variables
