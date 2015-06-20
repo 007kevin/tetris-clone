@@ -78,6 +78,12 @@ Grid::~Grid(){
 }
 
 void Grid::init(){
+  // Allocate memory to hold game piece coord
+  if (piece == NULL){
+    piece = new coord[4];
+  } 
+
+  // Allocate memory to hold cells for grid
   cells = new Cell*[NROW];
   for (int i = 0; i < NROW; i++){
     cells[i] = new Cell[NCOL];
@@ -112,10 +118,35 @@ void Grid::render(){
   SDL_RenderPresent(gRenderer);
 }
 
+void Grid::load(){
+  //All game pieces will consist of NCOORDS cells, 
+  /*
+  for (int i = 0; i < NCOORDS; ++i){
+    piece[i].x = k
+  }
+  */
+  piece[0].x = 0; piece[0].y = 0;
+  piece[1].x = 0; piece[1].y = 1;
+  piece[2].x = 1; piece[2].y = 0;
+  piece[3].x = 1; piece[3].y = 1;
+  set();
+}
+
+void Grid::set(){
+  //Set cells visible in reference to game piece
+  for (int i = 0; i < NCOORDS; ++i)
+   cells[STARTX + piece[i].x][STARTY + piece[i].y].on(); 
+}            
+
+
 void Grid::free(){
+  //Free cells
   for (int i = 0; i < NROW; ++i)
     delete [] cells[i];
-  delete cells;
+  delete [] cells;
+
+  //Free piece
+  delete [] piece;
 }
 
 

@@ -24,7 +24,7 @@ int main(int argc, char* args[])
 
     //Grid
     Grid tetris;
-
+   // tetris.load();
     //While application is running
     while(!quit)
     {
