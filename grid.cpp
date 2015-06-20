@@ -79,9 +79,7 @@ Grid::~Grid(){
 
 void Grid::init(){
   // Allocate memory to hold game piece coord
-  if (piece == NULL){
-    piece = new coord[4];
-  } 
+  piece = new coord[4];
 
   // Allocate memory to hold cells for grid
   cells = new Cell*[NROW];
@@ -134,6 +132,8 @@ void Grid::load(){
 
 void Grid::set(){
   //Set cells visible in reference to game piece
+  //Note, cell coordinates do not follow the x, y of the
+  //window coordinate (i.e cells[4][0] != cell.init(4, 0) 
   for (int i = 0; i < NCOORDS; ++i)
    cells[STARTX + piece[i].x][STARTY + piece[i].y].on(); 
 }            
@@ -143,10 +143,10 @@ void Grid::free(){
   //Free cells
   for (int i = 0; i < NROW; ++i)
     delete [] cells[i];
-  delete [] cells;
+  delete[] cells;
 
   //Free piece
-  delete [] piece;
+  delete[] piece;
 }
 
 

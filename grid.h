@@ -9,9 +9,11 @@
 #define NCOL 10
 
 //Define starting cell coordinates for game pieces.
-//Should be within the range of NROW and NCOL
-#define STARTX 4
-#define STARTY 0
+//Should be within the range of NROW and NCOL.
+//Note: Cell coordinates do not follow the x, y 
+//of window coorindates
+#define STARTX 0
+#define STARTY 3
 
 //Number of coords per game piece
 #define NCOORDS 4
