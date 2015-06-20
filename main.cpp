@@ -23,8 +23,10 @@ int main(int argc, char* args[])
     SDL_Event e;
 
     //Grid
+    //Note: Object destructor is automatically called
+    //when object gets out of scope
     Grid tetris;
-
+    tetris.load();
     //While application is running
     while(!quit)
     {
