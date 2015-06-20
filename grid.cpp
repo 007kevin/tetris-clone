@@ -115,7 +115,7 @@ void Grid::render(){
 void Grid::free(){
   for (int i = 0; i < NROW; ++i)
     delete [] cells[i];
-  delete cells;
+  delete[] cells;
 }
 
 
