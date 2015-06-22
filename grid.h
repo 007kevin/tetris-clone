@@ -18,6 +18,14 @@
 //Number of coords per game piece
 #define NCOORDS 4
 
+//Enumeration for direction
+enum Direction{
+  DIRECTION_UP,
+  DIRECTION_DOWN,
+  DIRECTION_LEFT,
+  DIRECTION_RIGHT
+};
+
 //Struct containing defined game pieces
 struct coord{
  int x,y;
@@ -44,12 +52,16 @@ class Cell{
 
     //Make cell invisible
     void off();
+    
+    bool getStatus();
 
   private:
     //Cell dimensions
     SDL_Rect rect;
     //Cell colors
     Uint8 r, g, b, a;
+    //True indicates cell is on
+    bool status;
 };
 
 /*********************************
@@ -74,6 +86,14 @@ class Grid{
     
     //Set game piece to display before rendering
     void set();
+
+    //Move game piece if no collision and update
+    //piece member of Grid class
+    void move(int);
+
+    //Check if moving in a direction results in a collision
+    //with either the border or cell
+    bool isCollision(int);
 
     //Deallocates texture
     void free();

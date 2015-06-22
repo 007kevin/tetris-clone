@@ -38,8 +38,28 @@ int main(int argc, char* args[])
         {
           quit = true;
         }
+        //User presses a key
+        else if (e.type == SDL_KEYDOWN)
+        {
+          //Move game piece
+          switch (e.key.keysym.sym)
+          {
+            case SDLK_UP:
+              printf("UP %d\n", tetris.isCollision(DIRECTION_UP));
+              break;
+            case SDLK_DOWN:
+              printf("DOWN %d\n", tetris.isCollision(DIRECTION_DOWN));
+              break;
+            case SDLK_LEFT:
+              printf("LEFT %d\n", tetris.isCollision(DIRECTION_LEFT));
+              break;
+            case SDLK_RIGHT:
+              printf("RIGHT %d\n", tetris.isCollision(DIRECTION_RIGHT));
+              break;
+          }
+        }
       }
-
+      
       tetris.render();
 
     }

@@ -147,7 +147,7 @@ void Grid::set(){
    cells[STARTX + piece[i].x][STARTY + piece[i].y].on(); 
 }            
 
-void Grid::move(int d){
+void move(int d){
   switch (d){
     case DIRECTION_UP:
       for (int i = 0 ; i < NCOORDS; ++i){ 
@@ -168,40 +168,42 @@ void Grid::move(int d){
       for (int i = 0 ; i < NCOORDS; ++i){ 
 
       }
+      break; case DIRECTION_UP:
+
   }
 }
 
-bool Grid::isCollision(int d){
+bool isCollision(int){
   bool flag = false;
   switch (d){
     case DIRECTION_UP:
       for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece[i].y - 1 < 0 || cells[piece[i].x][piece[i].y - 1 ].getStatus() == true){
-          flag = true;
+        if (piece[i].y - 1 < 0 || cells[piece[i].x][piece[i].y - 1 ].status == true){
+          flag = false;
           break;
         }
       }
       break;
     case DIRECTION_DOWN:
       for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece[i].y + 1 >= NROW || cells[piece[i].x][piece[i].y + 1].getStatus() == true){
-          flag = true;
+        if (piece[i].y + 1 >= NROW || cells[piece[i].x][piece[i].y + 1].status == true){
+          flag = false;
           break;
         }
       }
       break;
     case DIRECTION_LEFT:
       for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece[i].x - 1 < 0 || cells[piece[i].x - 1][piece[i].y].getStatus() == true){
-            flag = true;
+        if (piece[i].x - 1 < 0 || cells[piece[i].x - 1][piece[i].y].status == true){
+            flag = false;
             break;
         }
       }
       break;
     case DIRECTION_RIGHT:
       for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece[i].x + 1 >= NCOL || cells[piece[i].x + 1][piece[i].y].getStatus() == true){
-          flag = true;
+        if (piece[i].x + 1 >= NCOL || cells[piece[i].x + 1][piece[i].y].status == true){
+          flag = false;
           break;
       }
       break;
