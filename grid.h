@@ -84,7 +84,7 @@ class Grid{
     //Load game piece
     void load();
     
-    //Set game piece to display before rendering
+    //Set game piece to display before rendering. Used in load()
     void set();
 
     //Move game piece if no collision and update
@@ -95,6 +95,10 @@ class Grid{
     //with either the border or cell
     bool isCollision(int);
 
+    //Check if given coordinated are part of the game piece. Also
+    //checks if coordinates are outside game borders.
+    //Used in isCollision()
+    bool isGamePiece(int, int);
     //Deallocates texture
     void free();
 

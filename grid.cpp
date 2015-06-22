@@ -132,10 +132,10 @@ void Grid::load(){
     piece[i].x = k
   }
   */
-  piece[0].x = 0; piece[0].y = 0;
-  piece[1].x = 0; piece[1].y = 1;
-  piece[2].x = 1; piece[2].y = 0;
-  piece[3].x = 1; piece[3].y = 1;
+  piece[0].x = STARTX + 0; piece[0].y = STARTY + 0;
+  piece[1].x = STARTX + 0; piece[1].y = STARTY + 1;
+  piece[2].x = STARTX + 1; piece[2].y = STARTY + 0;
+  piece[3].x = STARTX + 1; piece[3].y = STARTY + 1;
   set();
 }
 
@@ -144,7 +144,7 @@ void Grid::set(){
   //Note, cell coordinates do not follow the x, y of the
   //window coordinate (i.e cells[4][0] != cell.init(4, 0) 
   for (int i = 0; i < NCOORDS; ++i)
-   cells[STARTX + piece[i].x][STARTY + piece[i].y].on(); 
+   cells[piece[i].x][piece[i].y].on(); 
 }            
 
 void Grid::move(int d){
@@ -174,9 +174,14 @@ void Grid::move(int d){
 bool Grid::isCollision(int d){
   bool flag = false;
   switch (d){
+    //Three logical conditions per game piece cell to determine collision:
+    //1. Moving in given direction by one cell does go over grid border
+    //2. Check that the compared cell status of 1 cell-unit direction over is not its own game piece
+    //3. Check the 1 cell-direction over has status set to true (i.e it is an active cell)
     case DIRECTION_UP:
-      for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece[i].y - 1 < 0 || cells[piece[i].x][piece[i].y - 1 ].getStatus() == true){
+      for (int i = 0; i < NCOORDS; ++i){
+        if (piece[i].x - 1 < 0 || (!isGamePiece(piece[i].x - 1, piece[i].y) &&
+            cells[piece[i].x - 1][piece[i].y].getStatus())){
           flag = true;
           break;
         }
@@ -184,7 +189,8 @@ bool Grid::isCollision(int d){
       break;
     case DIRECTION_DOWN:
       for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece[i].y + 1 >= NROW || cells[piece[i].x][piece[i].y + 1].getStatus() == true){
+        if (piece[i].x + 1 >= NROW || (!isGamePiece(piece[i].x + 1, piece[i].y) &&
+            cells[piece[i].x + 1][piece[i].y].getStatus())){
           flag = true;
           break;
         }
@@ -192,22 +198,36 @@ bool Grid::isCollision(int d){
       break;
     case DIRECTION_LEFT:
       for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece[i].x - 1 < 0 || cells[piece[i].x - 1][piece[i].y].getStatus() == true){
+        if (piece[i].y - 1 < 0 || (!isGamePiece(piece[i].x, piece[i].y - 1) &&
+            cells[piece[i].x][piece[i].y - 1].getStatus())){
             flag = true;
+            printf("piece[%d].x %d\n", i, piece[i].x);
+            printf("piece[%d].y %d\n", i, piece[i].y);
             break;
         }
       }
       break;
     case DIRECTION_RIGHT:
       for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece[i].x + 1 >= NCOL || cells[piece[i].x + 1][piece[i].y].getStatus() == true){
+        if (piece[i].y + 1 >= NCOL || (!isGamePiece(piece[i].x, piece[i].y + 1) &&
+            cells[piece[i].x][piece[i].y + 1].getStatus())){
           flag = true;
           break;
+        }
       }
       break;
-      }
   }
   return flag;
+}
+
+//Check if given coordinated are part of the game piece. Also
+//checks if coordinates are outside game borders.
+bool Grid::isGamePiece(int r, int c){
+  for (int i = 0; i < NCOORDS; ++i)
+    if ((piece[i].x == r && piece[i].y == c) ||
+        r < 0 || r >= NROW || c < 0 || c >=NCOL)
+      return true;
+  return false;
 }
 
 
