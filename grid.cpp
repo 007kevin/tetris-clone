@@ -101,6 +101,11 @@ void Grid::init(){
     for (int j = 0; j < NCOL; ++j)
       cells[i][j].init(gridx + j*SIZE, gridy + i*SIZE);
 
+  cells[10][3].on();
+  cells[10][4].on();
+  cells[10][5].on();
+  cells[10][6].on();
+
 }
 
 void Grid::render(){
@@ -132,10 +137,10 @@ void Grid::load(){
     piece[i].x = k
   }
   */
-  piece[0].x = STARTX + 0; piece[0].y = STARTY + 0;
-  piece[1].x = STARTX + 0; piece[1].y = STARTY + 1;
-  piece[2].x = STARTX + 1; piece[2].y = STARTY + 0;
-  piece[3].x = STARTX + 1; piece[3].y = STARTY + 1;
+  piece[0].x = STARTX + 1; piece[0].y = STARTY + 1;
+  piece[1].x = STARTX + 1; piece[1].y = STARTY + 2;
+  piece[2].x = STARTX + 2; piece[2].y = STARTY + 1;
+  piece[3].x = STARTX + 2; piece[3].y = STARTY + 2;
   set();
 }
 
@@ -147,27 +152,45 @@ void Grid::set(){
    cells[piece[i].x][piece[i].y].on(); 
 }            
 
+// Turn off current cells; Turn on new cell positions; Update piece coordinates
 void Grid::move(int d){
   switch (d){
     case DIRECTION_UP:
-      for (int i = 0 ; i < NCOORDS; ++i){ 
-    
-      }
+      if (!isCollision(DIRECTION_UP)){
+        for (int i = 0 ; i < NCOORDS; ++i){ 
+          cells[piece[i].x][piece[i].y].off();
+          piece[i].x -= 1;
+        }
+        set();
+      } 
       break;
     case DIRECTION_DOWN:
-      for (int i = 0 ; i < NCOORDS; ++i){ 
-
-      }
+       if (!isCollision(DIRECTION_DOWN)){
+        for (int i = 0 ; i < NCOORDS; ++i){ 
+          cells[piece[i].x][piece[i].y].off();
+          piece[i].x += 1;
+        }
+        set();
+      }  
       break;
     case DIRECTION_LEFT:
-      for (int i = 0 ; i < NCOORDS; ++i){ 
-
-      }
+        if (!isCollision(DIRECTION_LEFT)){
+        for (int i = 0 ; i < NCOORDS; ++i){ 
+          cells[piece[i].x][piece[i].y].off();
+          piece[i].y -= 1;
+        }
+        set();
+      } 
       break;
     case DIRECTION_RIGHT:
-      for (int i = 0 ; i < NCOORDS; ++i){ 
-
-      }
+        if (!isCollision(DIRECTION_RIGHT)){
+        for (int i = 0 ; i < NCOORDS; ++i){ 
+          cells[piece[i].x][piece[i].y].off();
+          piece[i].y += 1;
+        }
+        set();
+      }  
+      break;
   }
 }
 
@@ -201,8 +224,6 @@ bool Grid::isCollision(int d){
         if (piece[i].y - 1 < 0 || (!isGamePiece(piece[i].x, piece[i].y - 1) &&
             cells[piece[i].x][piece[i].y - 1].getStatus())){
             flag = true;
-            printf("piece[%d].x %d\n", i, piece[i].x);
-            printf("piece[%d].y %d\n", i, piece[i].y);
             break;
         }
       }
@@ -224,8 +245,7 @@ bool Grid::isCollision(int d){
 //checks if coordinates are outside game borders.
 bool Grid::isGamePiece(int r, int c){
   for (int i = 0; i < NCOORDS; ++i)
-    if ((piece[i].x == r && piece[i].y == c) ||
-        r < 0 || r >= NROW || c < 0 || c >=NCOL)
+    if (piece[i].x == r && piece[i].y == c)
       return true;
   return false;
 }

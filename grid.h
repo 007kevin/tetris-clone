@@ -85,6 +85,7 @@ class Grid{
     void load();
     
     //Set game piece to display before rendering. Used in load()
+    //and move()
     void set();
 
     //Move game piece if no collision and update

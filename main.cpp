@@ -45,16 +45,16 @@ int main(int argc, char* args[])
           switch (e.key.keysym.sym)
           {
             case SDLK_UP:
-              printf("UP %d\n", tetris.isCollision(DIRECTION_UP));
+              tetris.move(DIRECTION_UP);
               break;
             case SDLK_DOWN:
-              printf("DOWN %d\n", tetris.isCollision(DIRECTION_DOWN));
+              tetris.move(DIRECTION_DOWN);
               break;
             case SDLK_LEFT:
-              printf("LEFT %d\n", tetris.isCollision(DIRECTION_LEFT));
+              tetris.move(DIRECTION_LEFT);
               break;
             case SDLK_RIGHT:
-              printf("RIGHT %d\n", tetris.isCollision(DIRECTION_RIGHT));
+              tetris.move(DIRECTION_RIGHT);
               break;
           }
         }
