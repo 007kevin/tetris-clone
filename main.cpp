@@ -49,6 +49,12 @@ int main(int argc, char* args[])
               break;
             case SDLK_DOWN:
               tetris.move(DIRECTION_DOWN);
+              //Load new game piece if game piece collision with bottom
+              if (tetris.isCollision(DIRECTION_DOWN)){
+                //Delete complete lines and shift above cells down
+                tetris.shift();
+                tetris.load();
+              }
               break;
             case SDLK_LEFT:
               tetris.move(DIRECTION_LEFT);

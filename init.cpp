@@ -43,7 +43,9 @@ bool init()
     else
     {
       //Create renderer for window
-      gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+      //NOTE: Allowing VSync seems to have fixed the bug where rendered rectangles would flash diagonal 
+      //white lines
+      gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
       if (gRenderer == NULL)
       {
         fprintf(stderr, "Renderer could not be created! SDL Error %s\n", SDL_GetError());

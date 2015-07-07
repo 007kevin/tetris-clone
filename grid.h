@@ -53,6 +53,7 @@ class Cell{
     //Make cell invisible
     void off();
     
+    //Get current state of the cell
     bool getStatus();
 
   private:
@@ -100,6 +101,12 @@ class Grid{
     //checks if coordinates are outside game borders.
     //Used in isCollision()
     bool isGamePiece(int, int);
+
+    //Check for complete lines. Delete and shift down if any found.
+    //This function is called everytime a game piece bottom collision is 
+    //detected.
+    void shift();
+
     //Deallocates texture
     void free();
 

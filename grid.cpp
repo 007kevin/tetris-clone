@@ -21,8 +21,9 @@ Cell::~Cell(){
 }
 
 void Cell::init(int x, int y){
-  //Set cell position
-  rect = {x, y, SIZE, SIZE};
+  //Set cell position. Subtract by 1 to allow 1 pixel space 
+  //between cells
+  rect = {x, y, SIZE - 1, SIZE - 1};
 
   //Set initial status of cell to off
   status = false;
@@ -101,10 +102,10 @@ void Grid::init(){
     for (int j = 0; j < NCOL; ++j)
       cells[i][j].init(gridx + j*SIZE, gridy + i*SIZE);
 
+  cells[10][2].on();
   cells[10][3].on();
   cells[10][4].on();
   cells[10][5].on();
-  cells[10][6].on();
 
 }
 
@@ -121,7 +122,9 @@ void Grid::render(){
   }
 
   //Draw border around cells
-  SDL_Rect outline = {SCREEN_WIDTH/4, SCREEN_HEIGHT/8, NCOL*SIZE, NROW*SIZE};
+  //Subtraction (-2) and adding (+3) factors for 1 pixel
+  //space between cells and border
+  SDL_Rect outline = {SCREEN_WIDTH/4 - 2, SCREEN_HEIGHT/8 - 2, NCOL*SIZE + 3, NROW*SIZE + 3};
 
   SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
   SDL_RenderDrawRect(gRenderer, &outline);
@@ -248,6 +251,37 @@ bool Grid::isGamePiece(int r, int c){
     if (piece[i].x == r && piece[i].y == c)
       return true;
   return false;
+}
+
+//Scans grid for any complete lines. If found, delete then 
+//shift the blocks above down. 
+void Grid::shift(){
+  for (int i = 0; i < NROW; ++i){
+    //Flag for complete line
+    bool line = true;
+    for (int j = 0; j < NCOL; ++j)
+      if (!cells[i][j].getStatus())
+        line = false;
+    
+
+    //Starting from complete line to first row,
+    //shift blocks down
+    if (line && i > 0){
+      printf("Complete line found on row %d\n", i);
+      for (int ln = i; i > 0; --i){
+        for (int j = 0; j < NCOL; ++j){
+          //Get state of cell above
+          if (cells[ln - 1][j].getStatus())
+            cells[ln][j].on();
+          else
+            cells[ln][j].off();
+          printf("%s", cells[ln][j].getStatus() == true ? "=" : "-");
+        }
+        printf("\n");
+      }
+    }
+  }
+
 }
 
 
