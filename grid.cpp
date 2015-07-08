@@ -1,7 +1,29 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#include <stdlib.h> /* srand, rand */
+#include <time.h> /* time */
 #include "grid.h"
 #include "init.h"
+
+/********************************************
+ * Tetromino definitions
+ * ******************************************/
+coord Tetrominoes[][NCOORDS] = { 
+  //O-block definition
+  { {STARTX + 0, STARTY + 0}, {STARTX + 0, STARTY + 1}, {STARTX + 1, STARTY + 0}, {STARTX + 1, STARTY + 1} },
+  //I-block definition
+  { {STARTX + 0, STARTY + 0}, {STARTX + 0, STARTY + 1}, {STARTX + 0, STARTY + 2}, {STARTX + 0, STARTY + 3} },
+  //J-block definition
+  { {STARTX + 0, STARTY + 0}, {STARTX + 1, STARTY + 0}, {STARTX + 1, STARTY + 1}, {STARTX + 1, STARTY + 2} },
+  //L-block definition
+  { {STARTX + 1, STARTY + 0}, {STARTX + 1, STARTY + 1}, {STARTX + 1, STARTY + 2}, {STARTX + 0, STARTY + 2} },
+  //S-block definition
+  { {STARTX + 1, STARTY + 0}, {STARTX + 1, STARTY + 1}, {STARTX + 0, STARTY + 1}, {STARTX + 0, STARTY + 2} },
+  //T-block definition
+  { {STARTX + 1, STARTY + 0}, {STARTX + 1, STARTY + 1}, {STARTX + 0, STARTY + 1}, {STARTX + 1, STARTY + 2} },
+  //T-block definition
+  { {STARTX + 0, STARTY + 0}, {STARTX + 0, STARTY + 1}, {STARTX + 1, STARTY + 1}, {STARTX + 1, STARTY + 2} },
+};
 
 /*********************************************
  * Cell Class Definitions
@@ -88,6 +110,9 @@ Grid::~Grid(){
 }
 
 void Grid::init(){
+  // Initialize random seed for randomly selecting tetromino definitions
+  srand(time(NULL));
+
   // Allocate memory to hold game piece coord
   piece = new coord[4];
 
@@ -101,12 +126,12 @@ void Grid::init(){
   for (int i = 0; i < NROW; ++i)
     for (int j = 0; j < NCOL; ++j)
       cells[i][j].init(gridx + j*SIZE, gridy + i*SIZE);
-
+/*
   cells[10][2].on();
   cells[10][3].on();
   cells[10][4].on();
   cells[10][5].on();
-
+*/
 }
 
 void Grid::render(){
@@ -134,16 +159,16 @@ void Grid::render(){
 }
 
 void Grid::load(){
-  //All game pieces will consist of NCOORDS cells, 
-  /*
+  //Generate random number corresponding to number to tetromino definitions
+  int index = rand() % (sizeof(Tetrominoes)/sizeof(*Tetrominoes));
+
+  //Copy tetromino definition to piece array
+  //Note: All game pieces will consist of NCOORDS cells, 
   for (int i = 0; i < NCOORDS; ++i){
-    piece[i].x = k
+    piece[i].x = Tetrominoes[index][i].x;
+    piece[i].y = Tetrominoes[index][i].y;
   }
-  */
-  piece[0].x = STARTX + 1; piece[0].y = STARTY + 1;
-  piece[1].x = STARTX + 1; piece[1].y = STARTY + 2;
-  piece[2].x = STARTX + 2; piece[2].y = STARTY + 1;
-  piece[3].x = STARTX + 2; piece[3].y = STARTY + 2;
+
   set();
 }
 
@@ -267,17 +292,14 @@ void Grid::shift(){
     //Starting from complete line to first row,
     //shift blocks down
     if (line && i > 0){
-      printf("Complete line found on row %d\n", i);
-      for (int ln = i; i > 0; --i){
+      for (int ln = i; ln > 0; --ln){
         for (int j = 0; j < NCOL; ++j){
           //Get state of cell above
           if (cells[ln - 1][j].getStatus())
             cells[ln][j].on();
           else
             cells[ln][j].off();
-          printf("%s", cells[ln][j].getStatus() == true ? "=" : "-");
         }
-        printf("\n");
       }
     }
   }

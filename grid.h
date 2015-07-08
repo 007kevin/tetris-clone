@@ -18,6 +18,13 @@
 //Number of coords per game piece
 #define NCOORDS 4
 
+
+//Struct containing defined game pieces
+struct coord{
+ int x,y;
+};
+
+
 //Enumeration for direction
 enum Direction{
   DIRECTION_UP,
@@ -26,12 +33,18 @@ enum Direction{
   DIRECTION_RIGHT
 };
 
-//Struct containing defined game pieces
-struct coord{
- int x,y;
+/*********************************
+ * Struct for game piece definitions
+ * ******************************/
+struct piece_def{
+  coord piece[];
+  //To do: Add color to struct
 };
 
-//Cells for tetris grid
+
+/*********************************
+ * Cells for tetris grid
+ * ******************************/
 class Cell{
   public:
     Cell();
