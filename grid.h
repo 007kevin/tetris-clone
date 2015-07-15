@@ -41,6 +41,12 @@ struct piece_def{
   //To do: Add color to struct
 };
 
+/*********************************
+ * Struct to hold color definition
+ * ******************************/
+struct color{
+  Uint8 r, g, b, a;
+};
 
 /*********************************
  * Cells for tetris grid
@@ -60,14 +66,20 @@ class Cell{
     //Render cell
     void render();
 
-    //Make cell visible
-    void on();
+    //Make cell visible with specified colors
+    void on(Uint8, Uint8, Uint8, Uint8);
 
     //Make cell invisible
     void off();
     
     //Get current state of the cell
     bool getStatus();
+
+    //Get colors
+    Uint8 getr(); 
+    Uint8 getg();
+    Uint8 getb();
+    Uint8 geta();
 
   private:
     //Cell dimensions
@@ -100,7 +112,7 @@ class Grid{
     
     //Set game piece to display before rendering. Used in load()
     //and move()
-    void set();
+    void set(Uint8, Uint8, Uint8, Uint8);
 
     //Move game piece if no collision and update
     //piece member of Grid class

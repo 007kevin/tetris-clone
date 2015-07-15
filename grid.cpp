@@ -6,7 +6,7 @@
 #include "init.h"
 
 /********************************************
- * Tetromino definitions
+ * Tetromino definitions & colors
  * ******************************************/
 coord Tetrominoes[][NCOORDS] = { 
   //O-block definition
@@ -21,8 +21,25 @@ coord Tetrominoes[][NCOORDS] = {
   { {STARTX + 1, STARTY + 0}, {STARTX + 1, STARTY + 1}, {STARTX + 0, STARTY + 1}, {STARTX + 0, STARTY + 2} },
   //T-block definition
   { {STARTX + 1, STARTY + 0}, {STARTX + 1, STARTY + 1}, {STARTX + 0, STARTY + 1}, {STARTX + 1, STARTY + 2} },
-  //T-block definition
+  //Z-block definition
   { {STARTX + 0, STARTY + 0}, {STARTX + 0, STARTY + 1}, {STARTX + 1, STARTY + 1}, {STARTX + 1, STARTY + 2} },
+};
+
+color Colors[][NCOORDS] = {
+  //O-block color
+  {236,199,127, 0},
+  //I-block color
+  {236,153,86, 0},
+  //J-block color
+  {117,166,150, 0},
+  //L-block color
+  {77,129,183, 0},
+  //S-block color
+  {183,153,124, 0},
+  //T-block color
+  {177,137,205, 0},
+  //Z-block color
+  {127,127,127, 0}
 };
 
 /*********************************************
@@ -70,7 +87,7 @@ void Cell::render(){
     fprintf(stderr, "Could not set draw color: %s\n", SDL_GetError());
 
   //Render with draw colors
-  if (SDL_RenderDrawRect(gRenderer, &rect) < 0)
+  if (SDL_RenderFillRect(gRenderer, &rect) < 0)
     fprintf(stderr, "Could not draw cell: %s\n", SDL_GetError());
 
   //Reset to default draw colors
@@ -79,8 +96,11 @@ void Cell::render(){
 
 }
 
-void Cell::on(){
-  r = g = b = a = 0xFF;
+void Cell::on(Uint8 red, Uint8 grn, Uint8 blu, Uint8 alp ){
+  r = red; 
+  g = grn;
+  b = blu;
+  a = alp;
   status = true;
 }
 
@@ -95,6 +115,11 @@ void Cell::off(){
 bool Cell::getStatus(){
   return status;
 }
+
+Uint8 Cell::getr() {return r;}
+Uint8 Cell::getg() {return g;}
+Uint8 Cell::getb() {return b;}
+Uint8 Cell::geta() {return a;}
 
 /*********************************************
  * Grid Class Definitions
@@ -126,12 +151,6 @@ void Grid::init(){
   for (int i = 0; i < NROW; ++i)
     for (int j = 0; j < NCOL; ++j)
       cells[i][j].init(gridx + j*SIZE, gridy + i*SIZE);
-/*
-  cells[10][2].on();
-  cells[10][3].on();
-  cells[10][4].on();
-  cells[10][5].on();
-*/
 }
 
 void Grid::render(){
@@ -169,15 +188,15 @@ void Grid::load(){
     piece[i].y = Tetrominoes[index][i].y;
   }
 
-  set();
+  set(Colors[index]->r, Colors[index]->g, Colors[index]->b, Colors[index]->a);
 }
 
-void Grid::set(){
+void Grid::set(Uint8 red, Uint8 grn, Uint8 blu, Uint8 alp){
   //Set cells visible in reference to game piece
   //Note, cell coordinates do not follow the x, y of the
   //window coordinate (i.e cells[4][0] != cell.init(4, 0) 
   for (int i = 0; i < NCOORDS; ++i)
-   cells[piece[i].x][piece[i].y].on(); 
+   cells[piece[i].x][piece[i].y].on(red, grn, blu, alp); 
 }            
 
 // Turn off current cells; Turn on new cell positions; Update piece coordinates
@@ -185,38 +204,58 @@ void Grid::move(int d){
   switch (d){
     case DIRECTION_UP:
       if (!isCollision(DIRECTION_UP)){
+        Uint8 r, g, b, a;
         for (int i = 0 ; i < NCOORDS; ++i){ 
+          r = cells[piece[i].x][piece[i].y].getr();
+          g = cells[piece[i].x][piece[i].y].getg();
+          b = cells[piece[i].x][piece[i].y].getb();
+          a = cells[piece[i].x][piece[i].y].geta();
           cells[piece[i].x][piece[i].y].off();
           piece[i].x -= 1;
         }
-        set();
+        set(r,g,b,a);
       } 
       break;
     case DIRECTION_DOWN:
        if (!isCollision(DIRECTION_DOWN)){
+        Uint8 r, g, b, a;
         for (int i = 0 ; i < NCOORDS; ++i){ 
+          r = cells[piece[i].x][piece[i].y].getr();
+          g = cells[piece[i].x][piece[i].y].getg();
+          b = cells[piece[i].x][piece[i].y].getb();
+          a = cells[piece[i].x][piece[i].y].geta();
           cells[piece[i].x][piece[i].y].off();
           piece[i].x += 1;
         }
-        set();
+        set(r,g,b,a);
       }  
       break;
     case DIRECTION_LEFT:
         if (!isCollision(DIRECTION_LEFT)){
+        Uint8 r, g, b, a;
         for (int i = 0 ; i < NCOORDS; ++i){ 
+          r = cells[piece[i].x][piece[i].y].getr();
+          g = cells[piece[i].x][piece[i].y].getg();
+          b = cells[piece[i].x][piece[i].y].getb();
+          a = cells[piece[i].x][piece[i].y].geta();
           cells[piece[i].x][piece[i].y].off();
           piece[i].y -= 1;
         }
-        set();
+        set(r,g,b,a);
       } 
       break;
     case DIRECTION_RIGHT:
         if (!isCollision(DIRECTION_RIGHT)){
+        Uint8 r, g, b, a;
         for (int i = 0 ; i < NCOORDS; ++i){ 
+          r = cells[piece[i].x][piece[i].y].getr();
+          g = cells[piece[i].x][piece[i].y].getg();
+          b = cells[piece[i].x][piece[i].y].getb();
+          a = cells[piece[i].x][piece[i].y].geta();
           cells[piece[i].x][piece[i].y].off();
           piece[i].y += 1;
         }
-        set();
+        set(r,g,b,a);
       }  
       break;
   }
@@ -295,8 +334,15 @@ void Grid::shift(){
       for (int ln = i; ln > 0; --ln){
         for (int j = 0; j < NCOL; ++j){
           //Get state of cell above
-          if (cells[ln - 1][j].getStatus())
-            cells[ln][j].on();
+          if (cells[ln - 1][j].getStatus()){
+            Uint8 r, g, b, a;
+            r = cells[ln][j].getr();
+            g = cells[ln][j].getg();
+            b = cells[ln][j].getb();
+            a = cells[ln][j].geta();
+
+            cells[ln][j].on(r,g,b,a);
+          }
           else
             cells[ln][j].off();
         }
