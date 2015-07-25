@@ -45,7 +45,7 @@ int main(int argc, char* args[])
           switch (e.key.keysym.sym)
           {
             case SDLK_UP:
-              tetris.move(DIRECTION_UP);
+              tetris.rotate();
               break;
             case SDLK_DOWN:
               tetris.move(DIRECTION_DOWN);

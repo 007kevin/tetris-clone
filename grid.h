@@ -23,6 +23,19 @@ struct coord{
  int x,y;
 };
 
+/*********************************
+ * Struct to hold color definition
+ * ******************************/
+struct color{
+  Uint8 r, g, b, a;
+};
+
+//Struct for defining tetromino along with rotation
+struct tetro{
+  coord pos[NCOORDS];
+  color Color;  
+};
+
 
 //Enumeration for direction
 enum Direction{
@@ -30,13 +43,6 @@ enum Direction{
   DIRECTION_DOWN,
   DIRECTION_LEFT,
   DIRECTION_RIGHT
-};
-
-/*********************************
- * Struct to hold color definition
- * ******************************/
-struct color{
-  Uint8 r, g, b, a;
 };
 
 /*********************************
@@ -80,6 +86,8 @@ class Grid{
     //This function is called everytime a game piece bottom collision is 
     //detected.
     void shift();
+
+    void rotate();
 
     //Deallocates texture
     void free();

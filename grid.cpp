@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#include <string>
 #include <stdlib.h> /* srand, rand */
 #include <time.h> /* time */
 #include "init.h"
@@ -9,40 +10,29 @@
 /********************************************
  * Tetromino definitions & colors
  * ******************************************/
-coord Tetrominoes[][NCOORDS] = { 
+tetro Tetrominoes[] = { 
   //O-block definition
-  { {STARTX + 0, STARTY + 0}, {STARTX + 0, STARTY + 1}, {STARTX + 1, STARTY + 0}, {STARTX + 1, STARTY + 1} },
+  { { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
+    {236,199,127, 0} },
   //I-block definition
-  { {STARTX + 0, STARTY + 0}, {STARTX + 0, STARTY + 1}, {STARTX + 0, STARTY + 2}, {STARTX + 0, STARTY + 3} },
+  { { {0, 0}, {0, 1}, {0, 2}, {0, 3} },
+    {236,153,86, 0}  },
   //J-block definition
-  { {STARTX + 0, STARTY + 0}, {STARTX + 1, STARTY + 0}, {STARTX + 1, STARTY + 1}, {STARTX + 1, STARTY + 2} },
+  { { {0, 0}, {1, 0}, {1, 1}, {1, 2} },
+    {117,166,150, 0} },
   //L-block definition
-  { {STARTX + 1, STARTY + 0}, {STARTX + 1, STARTY + 1}, {STARTX + 1, STARTY + 2}, {STARTX + 0, STARTY + 2} },
+  { { {1, 0}, {1, 1}, {1, 2}, {0, 2} },
+    {77,129,183, 0}  },
   //S-block definition
-  { {STARTX + 1, STARTY + 0}, {STARTX + 1, STARTY + 1}, {STARTX + 0, STARTY + 1}, {STARTX + 0, STARTY + 2} },
+  { { {1, 0}, {1, 1}, {0, 1}, {0, 2} },
+    {183,153,124, 0} },
   //T-block definition
-  { {STARTX + 1, STARTY + 0}, {STARTX + 1, STARTY + 1}, {STARTX + 0, STARTY + 1}, {STARTX + 1, STARTY + 2} },
+  { { {1, 0}, {1, 1}, {0, 1}, {1, 2} },
+    {177,137,205, 0} },
   //Z-block definition
-  { {STARTX + 0, STARTY + 0}, {STARTX + 0, STARTY + 1}, {STARTX + 1, STARTY + 1}, {STARTX + 1, STARTY + 2} },
+  { { {0, 0}, {0, 1}, {1, 1}, {1, 2} },
+    {127,127,127, 0} }
 };
-
-color Colors[][NCOORDS] = {
-  //O-block color
-  {236,199,127, 0},
-  //I-block color
-  {236,153,86, 0},
-  //J-block color
-  {117,166,150, 0},
-  //L-block color
-  {77,129,183, 0},
-  //S-block color
-  {183,153,124, 0},
-  //T-block color
-  {177,137,205, 0},
-  //Z-block color
-  {127,127,127, 0}
-};
-
 
 
 /*********************************************
@@ -108,11 +98,12 @@ void Grid::load(){
   //Copy tetromino definition to piece array
   //Note: All game pieces will consist of NCOORDS cells, 
   for (int i = 0; i < NCOORDS; ++i){
-    piece[i].x = Tetrominoes[index][i].x;
-    piece[i].y = Tetrominoes[index][i].y;
+    piece[i].x = STARTX + Tetrominoes[index].pos[i].x;
+    piece[i].y = STARTY + Tetrominoes[index].pos[i].y;
   }
 
-  set(Colors[index]->r, Colors[index]->g, Colors[index]->b, Colors[index]->a);
+  set(Tetrominoes[index].Color.r, Tetrominoes[index].Color.g,
+      Tetrominoes[index].Color.b, Tetrominoes[index].Color.a);
 }
 
 void Grid::set(Uint8 red, Uint8 grn, Uint8 blu, Uint8 alp){
@@ -274,6 +265,11 @@ void Grid::shift(){
     }
   }
 
+}
+
+void Grid::rotate(){
+  const char *center = "Hello";
+  printf("%s\n", center);
 }
 
 
