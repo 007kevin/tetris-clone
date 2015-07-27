@@ -12,26 +12,40 @@
  * ******************************************/
 tetro Tetrominoes[] = { 
   //O-block definition
-  { { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
-    {236,199,127, 0} },
+  { 
+    { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
+    {236,199,127, 0} 
+  },
   //I-block definition
-  { { {0, 0}, {0, 1}, {0, 2}, {0, 3} },
-    {236,153,86, 0}  },
+  { 
+    { {1, 0}, {1, 1}, {1, 2}, {1, 3} },
+    {236,153,86, 0}
+  },
   //J-block definition
-  { { {0, 0}, {1, 0}, {1, 1}, {1, 2} },
-    {117,166,150, 0} },
+  { 
+    { {0, 0}, {1, 0}, {1, 1}, {1, 2} },
+    {117,166,150, 0} 
+  },
   //L-block definition
-  { { {1, 0}, {1, 1}, {1, 2}, {0, 2} },
-    {77,129,183, 0}  },
+  { 
+    { {1, 0}, {1, 1}, {1, 2}, {0, 2} },
+    {77,129,183, 0}  
+  },
   //S-block definition
-  { { {1, 0}, {1, 1}, {0, 1}, {0, 2} },
-    {183,153,124, 0} },
+  { 
+    { {1, 0}, {1, 1}, {0, 1}, {0, 2} },
+    {183,153,124, 0} 
+  },
   //T-block definition
-  { { {1, 0}, {1, 1}, {0, 1}, {1, 2} },
-    {177,137,205, 0} },
+  { 
+    { {1, 0}, {1, 1}, {0, 1}, {1, 2} },
+    {177,137,205, 0} 
+  },
   //Z-block definition
-  { { {0, 0}, {0, 1}, {1, 1}, {1, 2} },
-    {127,127,127, 0} }
+  { 
+    { {0, 0}, {0, 1}, {1, 1}, {1, 2} },
+    {127,127,127, 0} 
+  }
 };
 
 
@@ -52,8 +66,8 @@ void Grid::init(){
   // Initialize random seed for randomly selecting tetromino definitions
   srand(time(NULL));
 
-  // Allocate memory to hold game piece coord
-  piece = new coord[4];
+  // Initialize game piece with NULL
+  
 
   // Allocate memory to hold cells for grid
   cells = new Cell*[NROW];
@@ -98,8 +112,8 @@ void Grid::load(){
   //Copy tetromino definition to piece array
   //Note: All game pieces will consist of NCOORDS cells, 
   for (int i = 0; i < NCOORDS; ++i){
-    piece[i].x = STARTX + Tetrominoes[index].pos[i].x;
-    piece[i].y = STARTY + Tetrominoes[index].pos[i].y;
+    piece.pos[i].x = STARTX + Tetrominoes[index].pos[i].x;
+    piece.pos[i].y = STARTY + Tetrominoes[index].pos[i].y;
   }
 
   set(Tetrominoes[index].Color.r, Tetrominoes[index].Color.g,
@@ -111,7 +125,7 @@ void Grid::set(Uint8 red, Uint8 grn, Uint8 blu, Uint8 alp){
   //Note, cell coordinates do not follow the x, y of the
   //window coordinate (i.e cells[4][0] != cell.init(4, 0) 
   for (int i = 0; i < NCOORDS; ++i)
-   cells[piece[i].x][piece[i].y].on(red, grn, blu, alp); 
+   cells[piece.pos[i].x][piece.pos[i].y].on(red, grn, blu, alp); 
 }            
 
 // Get current cell colors; Turn off current cells; Turn on new cell positions; Update piece coordinates
@@ -121,12 +135,12 @@ void Grid::move(int d){
       if (!isCollision(DIRECTION_UP)){
         Uint8 r, g, b, a;
         for (int i = 0 ; i < NCOORDS; ++i){ 
-          r = cells[piece[i].x][piece[i].y].getr();
-          g = cells[piece[i].x][piece[i].y].getg();
-          b = cells[piece[i].x][piece[i].y].getb();
-          a = cells[piece[i].x][piece[i].y].geta();
-          cells[piece[i].x][piece[i].y].off();
-          piece[i].x -= 1;
+          r = cells[piece.pos[i].x][piece.pos[i].y].getr();
+          g = cells[piece.pos[i].x][piece.pos[i].y].getg();
+          b = cells[piece.pos[i].x][piece.pos[i].y].getb();
+          a = cells[piece.pos[i].x][piece.pos[i].y].geta();
+          cells[piece.pos[i].x][piece.pos[i].y].off();
+          piece.pos[i].x -= 1;
         }
         set(r,g,b,a);
       } 
@@ -135,12 +149,12 @@ void Grid::move(int d){
        if (!isCollision(DIRECTION_DOWN)){
         Uint8 r, g, b, a;
         for (int i = 0 ; i < NCOORDS; ++i){ 
-          r = cells[piece[i].x][piece[i].y].getr();
-          g = cells[piece[i].x][piece[i].y].getg();
-          b = cells[piece[i].x][piece[i].y].getb();
-          a = cells[piece[i].x][piece[i].y].geta();
-          cells[piece[i].x][piece[i].y].off();
-          piece[i].x += 1;
+          r = cells[piece.pos[i].x][piece.pos[i].y].getr();
+          g = cells[piece.pos[i].x][piece.pos[i].y].getg();
+          b = cells[piece.pos[i].x][piece.pos[i].y].getb();
+          a = cells[piece.pos[i].x][piece.pos[i].y].geta();
+          cells[piece.pos[i].x][piece.pos[i].y].off();
+          piece.pos[i].x += 1;
         }
         set(r,g,b,a);
       }  
@@ -149,12 +163,12 @@ void Grid::move(int d){
         if (!isCollision(DIRECTION_LEFT)){
         Uint8 r, g, b, a;
         for (int i = 0 ; i < NCOORDS; ++i){ 
-          r = cells[piece[i].x][piece[i].y].getr();
-          g = cells[piece[i].x][piece[i].y].getg();
-          b = cells[piece[i].x][piece[i].y].getb();
-          a = cells[piece[i].x][piece[i].y].geta();
-          cells[piece[i].x][piece[i].y].off();
-          piece[i].y -= 1;
+          r = cells[piece.pos[i].x][piece.pos[i].y].getr();
+          g = cells[piece.pos[i].x][piece.pos[i].y].getg();
+          b = cells[piece.pos[i].x][piece.pos[i].y].getb();
+          a = cells[piece.pos[i].x][piece.pos[i].y].geta();
+          cells[piece.pos[i].x][piece.pos[i].y].off();
+          piece.pos[i].y -= 1;
         }
         set(r,g,b,a);
       } 
@@ -163,12 +177,12 @@ void Grid::move(int d){
         if (!isCollision(DIRECTION_RIGHT)){
         Uint8 r, g, b, a;
         for (int i = 0 ; i < NCOORDS; ++i){ 
-          r = cells[piece[i].x][piece[i].y].getr();
-          g = cells[piece[i].x][piece[i].y].getg();
-          b = cells[piece[i].x][piece[i].y].getb();
-          a = cells[piece[i].x][piece[i].y].geta();
-          cells[piece[i].x][piece[i].y].off();
-          piece[i].y += 1;
+          r = cells[piece.pos[i].x][piece.pos[i].y].getr();
+          g = cells[piece.pos[i].x][piece.pos[i].y].getg();
+          b = cells[piece.pos[i].x][piece.pos[i].y].getb();
+          a = cells[piece.pos[i].x][piece.pos[i].y].geta();
+          cells[piece.pos[i].x][piece.pos[i].y].off();
+          piece.pos[i].y += 1;
         }
         set(r,g,b,a);
       }  
@@ -185,8 +199,8 @@ bool Grid::isCollision(int d){
     //3. Check the 1 cell-direction over has status set to true (i.e it is an active cell)
     case DIRECTION_UP:
       for (int i = 0; i < NCOORDS; ++i){
-        if (piece[i].x - 1 < 0 || (!isGamePiece(piece[i].x - 1, piece[i].y) &&
-            cells[piece[i].x - 1][piece[i].y].getStatus())){
+        if (piece.pos[i].x - 1 < 0 || (!isGamePiece(piece.pos[i].x - 1, piece.pos[i].y) &&
+            cells[piece.pos[i].x - 1][piece.pos[i].y].getStatus())){
           flag = true;
           break;
         }
@@ -194,8 +208,8 @@ bool Grid::isCollision(int d){
       break;
     case DIRECTION_DOWN:
       for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece[i].x + 1 >= NROW || (!isGamePiece(piece[i].x + 1, piece[i].y) &&
-            cells[piece[i].x + 1][piece[i].y].getStatus())){
+        if (piece.pos[i].x + 1 >= NROW || (!isGamePiece(piece.pos[i].x + 1, piece.pos[i].y) &&
+            cells[piece.pos[i].x + 1][piece.pos[i].y].getStatus())){
           flag = true;
           break;
         }
@@ -203,8 +217,8 @@ bool Grid::isCollision(int d){
       break;
     case DIRECTION_LEFT:
       for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece[i].y - 1 < 0 || (!isGamePiece(piece[i].x, piece[i].y - 1) &&
-            cells[piece[i].x][piece[i].y - 1].getStatus())){
+        if (piece.pos[i].y - 1 < 0 || (!isGamePiece(piece.pos[i].x, piece.pos[i].y - 1) &&
+            cells[piece.pos[i].x][piece.pos[i].y - 1].getStatus())){
             flag = true;
             break;
         }
@@ -212,8 +226,8 @@ bool Grid::isCollision(int d){
       break;
     case DIRECTION_RIGHT:
       for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece[i].y + 1 >= NCOL || (!isGamePiece(piece[i].x, piece[i].y + 1) &&
-            cells[piece[i].x][piece[i].y + 1].getStatus())){
+        if (piece.pos[i].y + 1 >= NCOL || (!isGamePiece(piece.pos[i].x, piece.pos[i].y + 1) &&
+            cells[piece.pos[i].x][piece.pos[i].y + 1].getStatus())){
           flag = true;
           break;
         }
@@ -227,7 +241,7 @@ bool Grid::isCollision(int d){
 //checks if coordinates are outside game borders.
 bool Grid::isGamePiece(int r, int c){
   for (int i = 0; i < NCOORDS; ++i)
-    if (piece[i].x == r && piece[i].y == c)
+    if (piece.pos[i].x == r && piece.pos[i].y == c)
       return true;
   return false;
 }
@@ -279,8 +293,6 @@ void Grid::free(){
     delete [] cells[i];
   delete[] cells;
 
-  //Free piece
-  delete[] piece;
 }
 
 

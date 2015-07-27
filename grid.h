@@ -30,10 +30,18 @@ struct color{
   Uint8 r, g, b, a;
 };
 
-//Struct for defining tetromino along with rotation
+//Struct for defining tetromino and color
 struct tetro{
   coord pos[NCOORDS];
   color Color;  
+
+  //Define center index and  upper left corner relative 
+  //to game piece for SRS style rotation algorithm.
+
+  int cindex; //index for center cell of game piece
+  int length; //side length of square containing game piece
+  coord corner; //coordinates to finding corner of square
+                //from center game piece
 };
 
 
@@ -96,7 +104,7 @@ class Grid{
     //Tetris grid composed of 22x10 cells
     Cell** cells;
     //Tetris game piece which holds coordinates of the game piece
-    coord* piece;
+    tetro piece;
   
 };
 
