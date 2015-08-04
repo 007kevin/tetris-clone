@@ -14,37 +14,58 @@ tetro Tetrominoes[] = {
   //O-block definition
   { 
     { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
-    {236,199,127, 0} 
+    {236,199,127, 0},
+    0,
+    2,
+    {0,0}
   },
   //I-block definition
   { 
     { {1, 0}, {1, 1}, {1, 2}, {1, 3} },
-    {236,153,86, 0}
+    {236,153,86, 0},
+    1,
+    4,
+    {-1,-1}
   },
   //J-block definition
   { 
     { {0, 0}, {1, 0}, {1, 1}, {1, 2} },
-    {117,166,150, 0} 
+    {117,166,150, 0},
+    2,
+    3,
+    {-1,-1}
   },
   //L-block definition
   { 
     { {1, 0}, {1, 1}, {1, 2}, {0, 2} },
-    {77,129,183, 0}  
+    {77,129,183, 0},
+    1,
+    3,
+    {-1,-1}
   },
   //S-block definition
   { 
     { {1, 0}, {1, 1}, {0, 1}, {0, 2} },
-    {183,153,124, 0} 
+    {183,153,124, 0},
+    3,
+    3,
+    {-1,-1}
   },
   //T-block definition
   { 
     { {1, 0}, {1, 1}, {0, 1}, {1, 2} },
-    {177,137,205, 0} 
+    {177,137,205, 0},
+    1,
+    3,
+    {-1,-1}
   },
   //Z-block definition
   { 
     { {0, 0}, {0, 1}, {1, 1}, {1, 2} },
-    {127,127,127, 0} 
+    {127,127,127, 0},
+    2,
+    3,
+    {-1,-1}
   }
 };
 
@@ -118,6 +139,10 @@ void Grid::load(){
 
   set(Tetrominoes[index].Color.r, Tetrominoes[index].Color.g,
       Tetrominoes[index].Color.b, Tetrominoes[index].Color.a);
+
+  piece.cindex = Tetrominoes[index].cindex;
+  piece.length = Tetrominoes[index].length;
+  piece.corner = Tetrominoes[index].corner;
 }
 
 void Grid::set(Uint8 red, Uint8 grn, Uint8 blu, Uint8 alp){
@@ -282,8 +307,16 @@ void Grid::shift(){
 }
 
 void Grid::rotate(){
-  const char *center = "Hello";
-  printf("%s\n", center);
+  //Determine box tetromino belongs to
+  coord topleft = {piece.pos[piece.cindex].x + piece.corner.x, 
+                   piece.pos[piece.cindex].y + piece.corner.y};
+  int factor = 0;
+  if (isCollision(DIRECTION_LEFT)) 
+    factor++;
+  if (isCollision(DIRECTION_RIGHT))
+    factor--;
+
+  printf("%d, %d\n", topleft.x, topleft.y);
 }
 
 
