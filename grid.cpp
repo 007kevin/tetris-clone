@@ -13,37 +13,83 @@
 tetro Tetrominoes[] = { 
   //O-block definition
   { 
+    // coord pos[NCOORDS]
     { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
+
+    //coord rotations[NCOORDS][NCOORDS]
+    {
+      { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
+      { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
+      { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
+      { {0, 0}, {0, 1}, {1, 0}, {1, 1} }
+    },
+    //color Color
     {236,199,127, 0} 
   },
   //I-block definition
   { 
     { {1, 0}, {1, 1}, {1, 2}, {1, 3} },
+    {
+      { {1, 0}, {1, 1}, {1, 2}, {1, 3} },
+      { {0, 1}, {1, 1}, {2, 1}, {3, 1} },
+      { {1, 0}, {1, 1}, {1, 2}, {1, 3} },
+      { {0, 1}, {1, 1}, {2, 1}, {3, 1} },
+    },
     {236,153,86, 0}
   },
   //J-block definition
   { 
     { {0, 0}, {1, 0}, {1, 1}, {1, 2} },
+    {
+      { {0, 0}, {1, 0}, {1, 1}, {1, 2} },
+      { {2, 0}, {0, 1}, {1, 1}, {2, 1} },
+      { {2, 2}, {2, 1}, {1, 1}, {0, 1} },
+      { {0, 2}, {1, 2}, {1, 1}, {1, 0} }
+    },
     {117,166,150, 0} 
   },
   //L-block definition
   { 
     { {1, 0}, {1, 1}, {1, 2}, {0, 2} },
+    {
+      { {1, 0}, {1, 1}, {1, 2}, {0, 2} },
+      { {0, 1}, {1, 1}, {1, 2}, {0, 2} },
+      { {1, 0}, {1, 1}, {1, 2}, {0, 2} },
+      { {1, 0}, {1, 1}, {1, 2}, {0, 2} }
+    },
     {77,129,183, 0}  
   },
   //S-block definition
   { 
     { {1, 0}, {1, 1}, {0, 1}, {0, 2} },
+    {
+      { {1, 0}, {1, 1}, {0, 1}, {0, 2} },
+      { {1, 0}, {1, 1}, {0, 1}, {0, 2} },
+      { {1, 0}, {1, 1}, {0, 1}, {0, 2} },
+      { {1, 0}, {1, 1}, {0, 1}, {0, 2} }
+    },
     {183,153,124, 0} 
   },
   //T-block definition
   { 
     { {1, 0}, {1, 1}, {0, 1}, {1, 2} },
+    {
+      { {1, 0}, {1, 1}, {0, 1}, {1, 2} },
+      { {1, 0}, {1, 1}, {0, 1}, {1, 2} },
+      { {1, 0}, {1, 1}, {0, 1}, {1, 2} },
+      { {1, 0}, {1, 1}, {0, 1}, {1, 2} }
+    },
     {177,137,205, 0} 
   },
   //Z-block definition
   { 
     { {0, 0}, {0, 1}, {1, 1}, {1, 2} },
+    {
+      { {0, 0}, {0, 1}, {1, 1}, {1, 2} },
+      { {0, 0}, {0, 1}, {1, 1}, {1, 2} },
+      { {0, 0}, {0, 1}, {1, 1}, {1, 2} },
+      { {0, 0}, {0, 1}, {1, 1}, {1, 2} }
+    },
     {127,127,127, 0} 
   }
 };
@@ -108,16 +154,16 @@ void Grid::render(){
 void Grid::load(){
   //Generate random number corresponding to number to tetromino definitions
   int index = rand() % (sizeof(Tetrominoes)/sizeof(*Tetrominoes));
+  piece = Tetrominoes[index];
 
-  //Copy tetromino definition to piece array
-  //Note: All game pieces will consist of NCOORDS cells, 
+  //Adjust tetromino starting positions to defined starting positions
   for (int i = 0; i < NCOORDS; ++i){
-    piece.pos[i].x = STARTX + Tetrominoes[index].pos[i].x;
-    piece.pos[i].y = STARTY + Tetrominoes[index].pos[i].y;
+    piece.pos[i].x = STARTX + piece.pos[i].x;
+    piece.pos[i].y = STARTY + piece.pos[i].y;
   }
 
-  set(Tetrominoes[index].Color.r, Tetrominoes[index].Color.g,
-      Tetrominoes[index].Color.b, Tetrominoes[index].Color.a);
+  set(piece.Color.r, piece.Color.g,
+      piece.Color.b, piece.Color.a);
 }
 
 void Grid::set(Uint8 red, Uint8 grn, Uint8 blu, Uint8 alp){

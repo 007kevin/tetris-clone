@@ -32,16 +32,14 @@ struct color{
 
 //Struct for defining tetromino and color
 struct tetro{
+  //Starting tetromino and current rotation in place
   coord pos[NCOORDS];
+
+  //Holds tetromino definitions. Four possible positions per tetronimo, 
+  //where each tetromino has 4 cells
+  coord rotations[NCOORDS][NCOORDS];
+
   color Color;  
-
-  //Define center index and  upper left corner relative 
-  //to game piece for SRS style rotation algorithm.
-
-  int cindex; //index for center cell of game piece
-  int length; //side length of square containing game piece
-  coord corner; //coordinates to finding corner of square
-                //from center game piece
 };
 
 
