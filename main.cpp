@@ -45,15 +45,14 @@ int main(int argc, char* args[])
           switch (e.key.keysym.sym)
           {
             case SDLK_UP:
+              tetris.move(DIRECTION_UP);
               tetris.rotate();
               break;
             case SDLK_DOWN:
-              tetris.move(DIRECTION_DOWN);
-              //Load new game piece if game piece collision with bottom
-              if (tetris.isCollision(DIRECTION_DOWN)){
-                //Delete complete lines and shift above cells down
-                tetris.shift();
-                tetris.load();
+              if (!tetris.move(DIRECTION_DOWN)){
+              //Delete complete lines and shift above cells down
+              tetris.shift();
+              tetris.load();
               }
               break;
             case SDLK_LEFT:

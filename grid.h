@@ -40,6 +40,7 @@ struct tetro{
   coord rotations[NCOORDS][NCOORDS];
 
   color Color;  
+
 };
 
 
@@ -77,11 +78,11 @@ class Grid{
 
     //Move game piece if no collision and update
     //piece member of Grid class
-    void move(int);
+    bool move(int);
 
     //Check if moving in a direction results in a collision
     //with either the border or cell
-    bool isCollision(int);
+    bool isCollision(coord*);
 
     //Check if given coordinated are part of the game piece. Also
     //checks if coordinates are outside game borders.

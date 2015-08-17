@@ -175,116 +175,62 @@ void Grid::set(Uint8 red, Uint8 grn, Uint8 blu, Uint8 alp){
 }            
 
 // Get current cell colors; Turn off current cells; Turn on new cell positions; Update piece coordinates
-void Grid::move(int d){
+// Return bool whether move was successful
+bool Grid::move(int d){
+  // Temporarily store coordinates of tetromino to be moved if there is no collision
+  coord tmp[NCOORDS];
+  memcpy(tmp, piece.pos, sizeof(piece.pos));
+
   switch (d){
     case DIRECTION_UP:
-      if (!isCollision(DIRECTION_UP)){
-        Uint8 r, g, b, a;
-        for (int i = 0 ; i < NCOORDS; ++i){ 
-          r = cells[piece.pos[i].x][piece.pos[i].y].getr();
-          g = cells[piece.pos[i].x][piece.pos[i].y].getg();
-          b = cells[piece.pos[i].x][piece.pos[i].y].getb();
-          a = cells[piece.pos[i].x][piece.pos[i].y].geta();
-          cells[piece.pos[i].x][piece.pos[i].y].off();
-          piece.pos[i].x -= 1;
-        }
-        set(r,g,b,a);
-      } 
+      // Set tmp coordinates to where moved piece would be
+      for (int i = 0; i < NCOORDS; ++i)
+        tmp[i].x--;
       break;
     case DIRECTION_DOWN:
-       if (!isCollision(DIRECTION_DOWN)){
-        Uint8 r, g, b, a;
-        for (int i = 0 ; i < NCOORDS; ++i){ 
-          r = cells[piece.pos[i].x][piece.pos[i].y].getr();
-          g = cells[piece.pos[i].x][piece.pos[i].y].getg();
-          b = cells[piece.pos[i].x][piece.pos[i].y].getb();
-          a = cells[piece.pos[i].x][piece.pos[i].y].geta();
-          cells[piece.pos[i].x][piece.pos[i].y].off();
-          piece.pos[i].x += 1;
-        }
-        set(r,g,b,a);
-      }  
+      for (int i = 0; i < NCOORDS; ++i)
+        tmp[i].x++;
       break;
     case DIRECTION_LEFT:
-        if (!isCollision(DIRECTION_LEFT)){
-        Uint8 r, g, b, a;
-        for (int i = 0 ; i < NCOORDS; ++i){ 
-          r = cells[piece.pos[i].x][piece.pos[i].y].getr();
-          g = cells[piece.pos[i].x][piece.pos[i].y].getg();
-          b = cells[piece.pos[i].x][piece.pos[i].y].getb();
-          a = cells[piece.pos[i].x][piece.pos[i].y].geta();
-          cells[piece.pos[i].x][piece.pos[i].y].off();
-          piece.pos[i].y -= 1;
-        }
-        set(r,g,b,a);
-      } 
+      for (int i = 0; i < NCOORDS; ++i)
+        tmp[i].y--;
       break;
     case DIRECTION_RIGHT:
-        if (!isCollision(DIRECTION_RIGHT)){
-        Uint8 r, g, b, a;
-        for (int i = 0 ; i < NCOORDS; ++i){ 
-          r = cells[piece.pos[i].x][piece.pos[i].y].getr();
-          g = cells[piece.pos[i].x][piece.pos[i].y].getg();
-          b = cells[piece.pos[i].x][piece.pos[i].y].getb();
-          a = cells[piece.pos[i].x][piece.pos[i].y].geta();
-          cells[piece.pos[i].x][piece.pos[i].y].off();
-          piece.pos[i].y += 1;
-        }
-        set(r,g,b,a);
-      }  
+      for (int i = 0; i < NCOORDS; ++i)
+        tmp[i].y++;
       break;
   }
+
+  if (!isCollision(tmp)){
+    for (int i = 0 ; i < NCOORDS; ++i){ 
+      cells[piece.pos[i].x][piece.pos[i].y].off();
+    }
+    memcpy(piece.pos, tmp, sizeof(piece.pos));
+    color *col = &piece.Color;
+    set(col->r,col->g,col->b,col->a);
+    return true;
+  }  
+  else
+    return false;
 }
 
-bool Grid::isCollision(int d){
+// To check for collision, must check the new position does not contain
+// coordinates outside the tetris grid along with any overlap with any 
+// non-current tetromino cell
+bool Grid::isCollision(coord* position){
   bool flag = false;
-  switch (d){
-    //Three logical conditions per game piece cell to determine collision:
-    //1. Moving in given direction by one cell does go over grid border
-    //2. Check that the compared cell status of 1 cell-unit direction over is not its own game piece
-    //3. Check the 1 cell-direction over has status set to true (i.e it is an active cell)
-    case DIRECTION_UP:
-      for (int i = 0; i < NCOORDS; ++i){
-        if (piece.pos[i].x - 1 < 0 || (!isGamePiece(piece.pos[i].x - 1, piece.pos[i].y) &&
-            cells[piece.pos[i].x - 1][piece.pos[i].y].getStatus())){
-          flag = true;
-          break;
-        }
-      }
-      break;
-    case DIRECTION_DOWN:
-      for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece.pos[i].x + 1 >= NROW || (!isGamePiece(piece.pos[i].x + 1, piece.pos[i].y) &&
-            cells[piece.pos[i].x + 1][piece.pos[i].y].getStatus())){
-          flag = true;
-          break;
-        }
-      }
-      break;
-    case DIRECTION_LEFT:
-      for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece.pos[i].y - 1 < 0 || (!isGamePiece(piece.pos[i].x, piece.pos[i].y - 1) &&
-            cells[piece.pos[i].x][piece.pos[i].y - 1].getStatus())){
-            flag = true;
-            break;
-        }
-      }
-      break;
-    case DIRECTION_RIGHT:
-      for (int i = 0 ; i < NCOORDS; ++i){ 
-        if (piece.pos[i].y + 1 >= NCOL || (!isGamePiece(piece.pos[i].x, piece.pos[i].y + 1) &&
-            cells[piece.pos[i].x][piece.pos[i].y + 1].getStatus())){
-          flag = true;
-          break;
-        }
-      }
-      break;
+  for (int i = 0; i < NCOORDS; ++i){
+    coord* tmp = &position[i];
+    if (tmp->x < 0 || tmp->x >= NROW || tmp->y < 0 || tmp->y >= NCOL ||
+        (!isGamePiece(tmp->x, tmp->y) && cells[tmp->x][tmp->y].getStatus())){
+      flag = true;
+      break; 
+    }
   }
   return flag;
 }
 
-//Check if given coordinated are part of the game piece. Also
-//checks if coordinates are outside game borders.
+//Check if given coordinated are part of the game piece.
 bool Grid::isGamePiece(int r, int c){
   for (int i = 0; i < NCOORDS; ++i)
     if (piece.pos[i].x == r && piece.pos[i].y == c)
@@ -328,8 +274,9 @@ void Grid::shift(){
 }
 
 void Grid::rotate(){
-  const char *center = "Hello";
-  printf("%s\n", center);
+//  int nexti = (piece.ti + 1) % NCOORDS;
+  coord tmp[NCOORDS];
+ // memcpy(tmp, piece.rotations, sizeof(piece.pos));
 }
 
 
