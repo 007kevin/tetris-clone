@@ -14,83 +14,62 @@ tetro Tetrominoes[] = {
   //O-block definition
   { 
     // coord pos[NCOORDS]
-    { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
-
-    //coord rotations[NCOORDS][NCOORDS]
-    {
-      { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
-      { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
-      { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
-      { {0, 0}, {0, 1}, {1, 0}, {1, 1} }
-    },
+    { {0, 0}, {0, 1}, 
+      {1, 0}, {1, 1} },
     //color Color
-    {236,199,127, 0} 
+    {236,199,127, 0},
+    // corner of box containing tetromino for rotation
+    {0, 0},
+    // length of box
+    2
   },
   //I-block definition
   { 
-    { {1, 0}, {1, 1}, {1, 2}, {1, 3} },
-    {
-      { {1, 0}, {1, 1}, {1, 2}, {1, 3} },
-      { {0, 1}, {1, 1}, {2, 1}, {3, 1} },
-      { {1, 0}, {1, 1}, {1, 2}, {1, 3} },
-      { {0, 1}, {1, 1}, {2, 1}, {3, 1} },
-    },
-    {236,153,86, 0}
+    { {1, 0}, {1, 1},
+      {1, 2}, {1, 3} },
+    {236,153,86, 0},
+    {0, 0},
+    4
   },
   //J-block definition
   { 
-    { {0, 0}, {1, 0}, {1, 1}, {1, 2} },
-    {
-      { {0, 0}, {1, 0}, {1, 1}, {1, 2} },
-      { {2, 0}, {0, 1}, {1, 1}, {2, 1} },
-      { {2, 2}, {2, 1}, {1, 1}, {0, 1} },
-      { {0, 2}, {1, 2}, {1, 1}, {1, 0} }
-    },
-    {117,166,150, 0} 
+    { {0, 0}, {1, 0},
+      {1, 1}, {1, 2} },
+    {117,166,150, 0},
+    {0, 0},
+    3
   },
   //L-block definition
   { 
-    { {1, 0}, {1, 1}, {1, 2}, {0, 2} },
-    {
-      { {1, 0}, {1, 1}, {1, 2}, {0, 2} },
-      { {0, 1}, {1, 1}, {1, 2}, {0, 2} },
-      { {1, 0}, {1, 1}, {1, 2}, {0, 2} },
-      { {1, 0}, {1, 1}, {1, 2}, {0, 2} }
-    },
-    {77,129,183, 0}  
+    { {1, 0}, {1, 1},
+      {1, 2}, {0, 2} },
+    {77,129,183, 0},  
+    {0, 0},
+    3
   },
   //S-block definition
   { 
-    { {1, 0}, {1, 1}, {0, 1}, {0, 2} },
-    {
-      { {1, 0}, {1, 1}, {0, 1}, {0, 2} },
-      { {1, 0}, {1, 1}, {0, 1}, {0, 2} },
-      { {1, 0}, {1, 1}, {0, 1}, {0, 2} },
-      { {1, 0}, {1, 1}, {0, 1}, {0, 2} }
-    },
-    {183,153,124, 0} 
+    { {1, 0}, {1, 1},
+      {0, 1}, {0, 2} },
+    {183,153,124, 0},
+    {0, 0},
+    3
   },
   //T-block definition
   { 
-    { {1, 0}, {1, 1}, {0, 1}, {1, 2} },
-    {
-      { {1, 0}, {1, 1}, {0, 1}, {1, 2} },
-      { {1, 0}, {1, 1}, {0, 1}, {1, 2} },
-      { {1, 0}, {1, 1}, {0, 1}, {1, 2} },
-      { {1, 0}, {1, 1}, {0, 1}, {1, 2} }
-    },
-    {177,137,205, 0} 
+    { {1, 0}, {1, 1},
+      {0, 1}, {1, 2} },
+    {177,137,205, 0},
+    {0, 0},
+    3
   },
   //Z-block definition
   { 
-    { {0, 0}, {0, 1}, {1, 1}, {1, 2} },
-    {
-      { {0, 0}, {0, 1}, {1, 1}, {1, 2} },
-      { {0, 0}, {0, 1}, {1, 1}, {1, 2} },
-      { {0, 0}, {0, 1}, {1, 1}, {1, 2} },
-      { {0, 0}, {0, 1}, {1, 1}, {1, 2} }
-    },
-    {127,127,127, 0} 
+    { {0, 0}, {0, 1},
+      {1, 1}, {1, 2} },
+    {127,127,127, 0},
+    {0, 0},
+    3
   }
 };
 
@@ -156,11 +135,13 @@ void Grid::load(){
   int index = rand() % (sizeof(Tetrominoes)/sizeof(*Tetrominoes));
   piece = Tetrominoes[index];
 
-  //Adjust tetromino starting positions to defined starting positions
+  //Offset starting positions specified be STARTX and STARTY
   for (int i = 0; i < NCOORDS; ++i){
     piece.pos[i].x = STARTX + piece.pos[i].x;
     piece.pos[i].y = STARTY + piece.pos[i].y;
   }
+  piece.bcorner.x = STARTX + piece.bcorner.x;
+  piece.bcorner.y = STARTY + piece.bcorner.y;
 
   set(piece.Color.r, piece.Color.g,
       piece.Color.b, piece.Color.a);
@@ -178,26 +159,31 @@ void Grid::set(Uint8 red, Uint8 grn, Uint8 blu, Uint8 alp){
 // Return bool whether move was successful
 bool Grid::move(int d){
   // Temporarily store coordinates of tetromino to be moved if there is no collision
-  coord tmp[NCOORDS];
+  coord tmp[NCOORDS], tmpcorner = piece.bcorner;
   memcpy(tmp, piece.pos, sizeof(piece.pos));
+
 
   switch (d){
     case DIRECTION_UP:
       // Set tmp coordinates to where moved piece would be
       for (int i = 0; i < NCOORDS; ++i)
         tmp[i].x--;
+      tmpcorner.x--;
       break;
     case DIRECTION_DOWN:
       for (int i = 0; i < NCOORDS; ++i)
         tmp[i].x++;
+      tmpcorner.x++;
       break;
     case DIRECTION_LEFT:
       for (int i = 0; i < NCOORDS; ++i)
         tmp[i].y--;
+      tmpcorner.y--;
       break;
     case DIRECTION_RIGHT:
       for (int i = 0; i < NCOORDS; ++i)
         tmp[i].y++;
+      tmpcorner.y++;
       break;
   }
 
@@ -206,6 +192,7 @@ bool Grid::move(int d){
       cells[piece.pos[i].x][piece.pos[i].y].off();
     }
     memcpy(piece.pos, tmp, sizeof(piece.pos));
+    piece.bcorner = tmpcorner;
     color *col = &piece.Color;
     set(col->r,col->g,col->b,col->a);
     return true;
@@ -274,9 +261,29 @@ void Grid::shift(){
 }
 
 void Grid::rotate(){
-//  int nexti = (piece.ti + 1) % NCOORDS;
-  coord tmp[NCOORDS];
- // memcpy(tmp, piece.rotations, sizeof(piece.pos));
+  coord tmp[NCOORDS], newpos[NCOORDS], tmpcorner = piece.bcorner;
+  memcpy(tmp, piece.pos, sizeof(piece.pos));
+
+  //Simulate wall kick
+  while (tmpcorner.y < 0){
+    tmpcorner.y++;
+    for (int i = 0; i < NCOORDS; ++i)
+      tmp[i].y++;
+  }
+  while (tmpcorner.y + piece.blength - 1 >= NCOL){
+    tmpcorner.y--;
+    for (int i = 0; i < NCOORDS; ++i)
+      tmp[i].y--;
+  }
+
+  for (int i = 0; i < piece.blength; ++i)
+    for (int j = 0; j < piece.blength; ++i){
+      //To do: Find proper rotation algorithm, them check if there is collision  
+    }
+
+
+
+  printf("%d %d\n", tmpcorner.x, tmpcorner.y);
 }
 
 

@@ -34,13 +34,11 @@ struct color{
 struct tetro{
   //Starting tetromino and current rotation in place
   coord pos[NCOORDS];
-
-  //Holds tetromino definitions. Four possible positions per tetronimo, 
-  //where each tetromino has 4 cells
-  coord rotations[NCOORDS][NCOORDS];
-
   color Color;  
-
+  //Coordinates for top left corner of box containing tetromino. Will update
+  //as piece moves. Full dimension of the box can be calculated during rotation.
+  coord bcorner;
+  int blength;
 };
 
 
