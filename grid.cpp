@@ -204,10 +204,10 @@ bool Grid::move(int d){
 // To check for collision, must check the new position does not contain
 // coordinates outside the tetris grid along with any overlap with any 
 // non-current tetromino cell
-bool Grid::isCollision(coord* position){
+bool Grid::isCollision(const coord* position){
   bool flag = false;
   for (int i = 0; i < NCOORDS; ++i){
-    coord* tmp = &position[i];
+    const coord* tmp = &position[i];
     if (tmp->x < 0 || tmp->x >= NROW || tmp->y < 0 || tmp->y >= NCOL ||
         (!isGamePiece(tmp->x, tmp->y) && cells[tmp->x][tmp->y].getStatus())){
       flag = true;
@@ -260,10 +260,20 @@ void Grid::shift(){
 
 }
 
+/* Transpose and change rows to rotate 90 deg, or change columns to rotate -90 deg */
 void Grid::rotate(){
-  coord tmp[NCOORDS], newpos[NCOORDS], tmpcorner = piece.bcorner;
-  memcpy(tmp, piece.pos, sizeof(piece.pos));
+  coord tmp[NCOORDS], tmpcorner = piece.bcorner;
+  int indx = 0;
 
+  //Transpose & swap columns
+  int sx = piece.bcorner.x, sy = piece.bcorner.y;
+  int blen = piece.blength;
+  for (int i = 0; i < blen; ++i)
+    for (int j = 0; j < blen; ++j){
+      if (isGamePiece(sx + i,sy + j))
+        tmp[indx++] = {sx + j, sy + blen - 1 - i};
+    }
+  
   //Simulate wall kick
   while (tmpcorner.y < 0){
     tmpcorner.y++;
@@ -276,14 +286,17 @@ void Grid::rotate(){
       tmp[i].y--;
   }
 
-  for (int i = 0; i < piece.blength; ++i)
-    for (int j = 0; j < piece.blength; ++i){
-      //To do: Find proper rotation algorithm, them check if there is collision  
+  //Set rotated piece only if no collision is detected
+  if (!isCollision(tmp)){
+    for (int i = 0 ; i < NCOORDS; ++i){ 
+      cells[piece.pos[i].x][piece.pos[i].y].off();
     }
+    memcpy(piece.pos, tmp, sizeof(piece.pos));
+    piece.bcorner = tmpcorner;
+    color *col = &piece.Color;
+    set(col->r,col->g,col->b,col->a);
+  }
 
-
-
-  printf("%d %d\n", tmpcorner.x, tmpcorner.y);
 }
 
 

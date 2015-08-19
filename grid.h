@@ -80,7 +80,7 @@ class Grid{
 
     //Check if moving in a direction results in a collision
     //with either the border or cell
-    bool isCollision(coord*);
+    bool isCollision(const coord*);
 
     //Check if given coordinated are part of the game piece. Also
     //checks if coordinates are outside game borders.
