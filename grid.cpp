@@ -260,7 +260,7 @@ void Grid::shift(){
 
 }
 
-/* Transpose and change rows to rotate 90 deg, or change columns to rotate -90 deg */
+/* Transpose and change columns to rotate 90 deg, or change rows to rotate -90 deg */
 void Grid::rotate(){
   coord tmp[NCOORDS], tmpcorner = piece.bcorner;
   int indx = 0;
